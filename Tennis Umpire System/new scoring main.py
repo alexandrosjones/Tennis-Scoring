@@ -3,6 +3,7 @@ import random
 import sys
 from os import path
 from settings import *
+from player import *
 
 #TODO
 #Scoring + more
@@ -61,15 +62,7 @@ class Game:
         pg.key.set_repeat(500,100)
         #self.screen_scenario = WELCOME
         self.load_data()
-        self.P1_Score = int(0)
-        self.P2_Score = int(0)
-        self.P1_Games = int(0)
-        self.P2_Games = int(0)
-        self.P1_Sets = int(0)
-        self.P2_Sets = int(0)
         self.Game_Deuce = False
-        self.Game_Advantage_P1 = False
-        self.Game_Advantage_P2 = False
         self.Game_Tiebreaker = False
         #self.Game_Winner = False
         self.sets = DEFAULT_SETS
@@ -117,137 +110,8 @@ class Game:
     def new(self):
         self.paused = False
         self.screen.fill(DARKGREEN)
-
-    """def end_game(self):
-        self.P1_Score = 0
-        self.P2_Score = 0
-        if self.serve == 1:
-            self.serve = 2
-        if self.serve == 2:
-            self.serve = 1"""
-
-    #Checks whether to enter a deuce or advantage mode
-    """def check_state(self):
-        if not self.Game_Tiebreaker:
-            if self.P1_Score == 3 and self.P2_Score == 3:
-                self.Game_Deuce = True
-                self.Game_Advantage_P1 = False
-                self.Game_Advantage_P2 = False
-            if (self.P1_Score == 4 and self.P2_Score == 3):
-                self.Game_Deuce = False
-                self.Game_Advantage_P1 = True
-                self.Game_Advantage_P2 = False
-            if (self.P1_Score == 3 and self.P2_Score == 4):
-                self.Game_Deuce = False
-                self.Game_Advantage_P1 = False
-                self.Game_Advantage_P2 = True
-            if (self.P1_Score == 5 and self.P2_Score == 3):
-                self.Game_Deuce = self.Game_Advantage_P1 = self.Game_Advantage_P2 = False
-                self.add_game_1()
-            if self.P1_Score == 3 and self.P2_Score == 5:
-                self.Game_Deuce = self.Game_Advantage_P1 = self.Game_Advantage_P2 = False
-                self.add_game_2()
-            if (self.P1_Score == 4 and self.P2_Score == 4):
-                self.P1_Score = 3
-                self.P2_Score = 3
-                self.Game_Advantage_P1 = False
-                self.Game_Advantage_P2 = False
-                self.Game_Deuce = True"""
-
-    #Functions for adding/removing points to a player
-    """def add_point_1(self):
-        if self.P1_Score < 4 and self.Game_Deuce == False and self.Game_Advantage == False and self.Game_Tiebreaker == False:
-            self.P1_Score = self.P1_Score + 1
-        print("P1 score is now:", self.P1_Score)
-
-    def add_point_2(self):
-        if self.P2_Score < 4 and self.Game_Deuce == False and self.Game_Advantage == False and self.Game_Tiebreaker == False:
-            self.P2_Score = self.P2_Score + 1
-        print("P2 score is now:", self.P2_Score)
-
-    def remove_point_1(self):
-        if int(self.P1_Score) > 0:
-            self.P1_Score = self.P1_Score - 1
-            print("1 point removed added from P1")
-        print("P1 score is now:", self.P1_Score)
-
-    def remove_point_2(self):
-        if int(self.P2_Score) > 0:
-            self.P2_Score = self.P2_Score - 1
-            print("1 point removed added from P2")
-        print("P1 score is now:", self.P2_Score)
-
-    def add_game_1(self):
-        if (self.P1_Score >= 4) and (self.P2_Score <= self.P1_Score - 2):
-            print("P1 just won a game")
-            self.end_game()
-            self.P1_Games += 1
-            print("P1 now has",self.P1_Games,"game(s)")
-        elif (self.P1_Score == 5):
-            print("P1 just won a game")
-            self.end_game()
-            self.P1_Games += 1
-            print("P1 now has", self.P1_Games, "game(s)")
-
-    def add_game_2(self):
-        if (self.P2_Score >= 4) and (self.P1_Score <= self.P2_Score - 2):
-            print("P2 just won a game")
-            self.end_game()
-            self.P2_Games = self.P2_Games + 1
-            print("P2 now has",self.P2_Games,"game(s)")
-        elif (self.P2_Score == 5):
-            print("P2 just won a game")
-            self.end_game()
-            self.P2_Games += 1
-            print("P2 now has", self.P2_Games, "game(s)")
-
-    def add_set_1(self):
-        pass
-
-    def add_set_2(self):
-        pass
-
-    def deuce_add_point_1(self):
-        self.P1_Score += 1
-        self.Game_Deuce = False
-        self.Game_Advantage_P1 = True
-        self.Game_Advantage_P2 = False
-
-    def deuce_add_point_2(self):
-        self.P2_Score += 1
-        self.Game_Advantage_P1 = False
-        self.Game_Advantage_P2 = True
-        self.Game_Deuce = False
-
-    def advantage_add_point_1(self):
-        self.Game_Advantage_P1 = False
-        self.add_game_1()
-    
-    def advantage_add_point_2(self):
-        self.Game_Advantage_P2 = False
-        self.add_game_2()
-
-    def disadvantage_point_1(self):
-        self.P1_Score = self.P2_Score = 3
-        self.Game_Advantage_P2 = False
-        self.Game_Deuce = True
-    
-    def disadvantage_point_2(self):
-        self.Game_Advantage_P1 = False
-        self.Game_Deuce = True
-        self.P1_Score = self.P2_Score = 3
-
-    def deuce(self):
-        #print("deuce")
-        pass
-
-    def tiebreaker(self):
-        #print("tiebreaker")
-        pass
-
-    def advantage(self):
-        #print("advantage")
-        pass"""
+        self.player1 = Player(PLAYER1, 1, DEFAULT_SETS, self.Game_Deuce, self.Game_Tiebreaker, False)
+        self.player2 = Player(PLAYER2, 0, DEFAULT_SETS, self.Game_Deuce, self.Game_Tiebreaker, False)
 
     def input_box_update(self):
         input_box1 = InputBox(100,100,140,32)
@@ -287,20 +151,16 @@ class Game:
 
     #Update function that gets called in a loop to then call all the other functions that need to be run
     def update(self):
-        #Check scoring to update and reset games
-        """self.add_game_1()
-        self.add_game_2()
-        self.add_set_1()
-        self.add_set_2()
-        if self.Game_Deuce:
-            self.deuce()
-        if self.Game_Tiebreaker:
-            self.tiebreaker()
-        if self.Game_Advantage_P1 or self.Game_Advantage_P2:
-            self.advantage()
-        self.check_state()"""
-        
-        #print(self.P1_Games)
+        self.check_state()
+
+    def check_state(self):
+        if self.player1.score == self.player2.score == 3:
+            self.Game_Deuce = True
+            self.player1.advantage = self.player1.disadvantage = self.player2.advantage = self.player2.disadvantage = False
+        if self.player1.score == 4 and self.player2.score == 3:
+            self.player1.advantage = self.player2.disadvantage = True
+        if self.player1.score == 3 and self.player2.score == 4:
+            self.player1.disadvantage = self.player2.advantage = True
 
     #Draw function to blit all the text and scores onto the screen
     def draw(self):
@@ -317,12 +177,12 @@ class Game:
             pg.draw.rect(self.screen, BLACK, (SETS_BOX_X, SETS_BOX_Y - SETS_BOX_HEIGHT - SETS_BOX_OFFSET, SETS_BOX_WIDTH, SETS_BOX_HEIGHT))       
 
         #Text
-        self.draw_text("The National Championships", self.text_font, 80, WHITE, WIDTH/2, 55, align = "center")
+        self.draw_text("The National Championships", self.text_font, 80, WHITE, WIDTH/2, 551212, align = "center")
         self.draw_text("Points", self.text_font, 40, WHITE, POINTS_BOX_X_1, POINTS_BOX_Y_2 - (5*POINTS_BOX_OFFSET), align="w")
 
         #Points
-        self.draw_text(str(POINTS[self.P1_Score]), self.points_font, 180, YELLOW, POINTS_BOX_X_2, POINTS_BOX_Y_2)
-        self.draw_text(str(POINTS[self.P2_Score]), self.points_font, 180, YELLOW, POINTS_BOX_X_1, POINTS_BOX_Y_1)
+        self.draw_text(str(POINTS[self.player1.score]), self.points_font, 180, YELLOW, POINTS_BOX_X_2, POINTS_BOX_Y_2)
+        self.draw_text(str(POINTS[self.player2.score]), self.points_font, 180, YELLOW, POINTS_BOX_X_1, POINTS_BOX_Y_1)
 
         #Names
         self.draw_text(PLAYER1, self.text_font, 40, WHITE, POINTS_BOX_X_2 + POINTS_BOX_WIDTH + POINTS_BOX_OFFSET, POINTS_BOX_Y_2 + 20, align ="w")
@@ -342,47 +202,17 @@ class Game:
             if event.type == pg.QUIT:
                 self.quit()
             if event.type == pg.KEYDOWN:
-                print("keypress")
+                #print("keypress")
                 if event.type == KILL_PROGRAM:
                     self.quit()
                 if event.key == PAUSE:
                     self.paused = not self.paused
-                """if not self.Game_Deuce and not self.Game_Advantage and not self.Game_Tiebreaker:
-                    if event.key == ADD_POINT_P1:
-                        self.add_point_1()
-                    if event.key == ADD_POINT_P2:
-                        self.add_point_2()
-                    if event.key == REMOVE_POINT_P1:
-                        self.remove_point_1()
-                    if event.key == REMOVE_POINT_P2:
-                        self.remove_point_2()
-                if self.Game_Deuce:
-                    if event.key == ADD_POINT_P1:
-                        self.deuce_add_point_1()
-                    if event.key == ADD_POINT_P2:
-                        self.deuce_add_point_2()
-                if self.Game_Advantage_P1:
-                    if event.key == ADD_POINT_P1:
-                        self.advantage_add_point_1()
-                        print("Advantage point to 1")
-                        print("P1 score is:",self.P1_Score)
-                        print("P2 score is:",self.P2_Score)
-                    if event.key == ADD_POINT_P2:
-                        self.disadvantage_point_1()
-                        print("Disadvantage point to 2")
-                        print("P1 score is:",self.P1_Score)
-                        print("P2 score is:",self.P2_Score)
-                if self.Game_Advantage_P2:
-                    if event.key == ADD_POINT_P1:
-                        self.advantage_add_point_2()
-                        print("Advantage point to 2")
-                        print("P1 score is:",self.P1_Score)
-                        print("P2 score is:",self.P2_Score)
-                    if event.key == ADD_POINT_P2:
-                        self.disadvantage_point_2()
-                        print("Disadvantage point to 1")
-                        print("P1 score is:",self.P1_Score)
-                        print("P2 score is:",self.P2_Score)"""
+                if event.key == ADD_POINT_P1:
+                    self.player1.add_point()
+                    if self.player1.disadvantage or self.player2.disadvantage:
+                        self.player1.disadvantage = self.player2.disadvantage = False
+                if event.key == ADD_POINT_P2:
+                    self.player2.add_point()
 
     def show_start_screen(self):
         self.screen.blit(MAIN_MENU_IMG, (0,0))

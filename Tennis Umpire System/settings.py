@@ -1,5 +1,6 @@
 import pygame as pg 
-
+import random
+pg.init()
 #Colour RGB values
 WHITE = (255,255,255)
 BLACK = (0,0,0)
@@ -14,17 +15,24 @@ BLUE = (0,0,255)
 YELLOW = (255,255,0)
 DARKGREEN = (0,125,0)
 
+#Players
+PLAYER1 = "Player 1"
+PLAYER2 = "Player 2"
+POINTS = [0, 15, 30, 40, "AD"]
+
 #Game startup settings
 WIDTH = 1600
 HEIGHT = 760
 FPS = 120
-TITLE = "Python Star Soccer"
+TITLE = "Umpire Tennis Scoreboard"
 BGCOLOUR = BROWN
 DEFAULT_SETS = 5
 WINNER = "Null"
+FONT = pg.font.Font(None, 32)
 
 #Various GUI image locations
 MAIN_MENU_IMG = pg.transform.scale(pg.image.load("img/tilemap/mainmenu.png"), (WIDTH, HEIGHT))
+SERVER_IMG = pg.transform.scale(pg.image.load("img/tilemap/server.png"),(30,30))
 
 #Music settings
 BG_MUSIC_VOLUME = 0.2
